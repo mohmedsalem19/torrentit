@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html ng-app="torrentit">
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body ng-controller="cont1">
+    <h1><%= title %></h1>
+    <p>Welcome to <%= title %></p>
+	<br />
+		<form method="post" enctype="multipart/form-data" action="http://127.0.0.1/uploadtorrent/index.php">
+			<input type="file" name="torrent" />
+			<input type="submit" name="upload" value="Upload & play">
+		</form>
+	
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+    <script type="text/javascript">
+    	var app = angular.module('torrentit', []);
+    	app.controller('cont1', ['$http', '$scope', '$log', function($http, $scope, $log){
+    		
+    		
+    	}]);
+    </script>
+  </body>
+</html>

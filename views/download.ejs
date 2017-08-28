@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html ng-app="downlaod">
+  <head>
+    <title>downlaod</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body ng-controller="cont1">
+	<b>file size: </b> <i id="size"><%= size %></i> Kb<br/>
+	<b>File to upload: </b><i id="file"><%= folder %>/<%= file %></i><br/>
+	<b>Progress: </b> <i class="prog">{{ progr }} %</i>
+	<br />
+        <b>Compress: </b><%if (compress.length > 0) { %>
+        <i id="compress">yes</i>
+<% } %>
+<%if (compress.length == 0) { %>
+        <i id="compress">no</i>
+<% } %>
+    <br />
+	<b style="color: green;">{{ success }}</b>
+	
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+    <script type="text/javascript">
+    	var app = angular.module('downlaod', []);
+    	app.controller('cont1', ['$http', '$log', '$scope', '$interval', '$window', function($http, $log, $scope, $interval, $window){
+    		$scope.progr = '';
+    		$scope.fily = angular.element('#file');
+    		$scope.folder = $scope.fily[0].textContent;
+    		$scope.sizeee = angular.element('#size');
+    		$scope.sizoooo = $scope.sizeee[0].textContent;
+            $scope.compress = angular.element('#compress');
+            $scope.compresso = $scope.compress[0].textContent;
+    		$scope.success = '';
+    		$scope.sendddo = '';
+    		$scope.uploadurl = '';
+    		$scope.$watch('sendddo', function(newValue, oldValue, scope) {
+    			if (newValue == 'done') {
+    				$window.location.href = 'http://127.0.0.1:3000/upload/' + $scope.folder + '/' + $scope.uploadurl + '/' + $scope.compresso;
+    				$log.log($scope.uploadurl);
+    			}
+    		}, false);
+    		$scope.$watch('progr', function(newValue, oldValue, scope) {
+    			if (newValue == '100') {
+    				$scope.success = 'Downloading finished now we upload the file !';
+    				$http.post('https://api.openload.co/1/file/ul?login=6fd00431fa9a054f&key=g_0wcpJe', {}).then(function(res){
+    					$scope.sendddo = 'done';
+    					$scope.uploadurl = res.data.result.url;
+    				});
+    			}else{
+    				$scope.success = 'downloading !....';
+    			}
+    		}, false);
+    		$interval(function(){
+    			$http.get('http://127.0.0.1/uploadtorrent/check.php?folder=' + $scope.folder + '&orgin=' + $scope.sizoooo).then(function(res){
+    				$scope.progr = res.data;
+    				//$scope.givemepercent($scope.progr, $scope.sizoooo);
+    			});
+
+    		}, 500);
+    	}]);
+    </script>
+  </body>
+ </html>

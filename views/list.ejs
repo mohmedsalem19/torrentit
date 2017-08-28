@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html ng-app="downlaod">
+  <head>
+    <title>downlaod</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body ng-controller="cont1">
+	<b>Filename: </b> <span id="filoname"><%= filename %></span>
+	<b>Torrent Size: </b> <span id="torrentsize"><%= torrentsize %></span>
+	<ul>
+	<form action="../download" method="get">
+	<b>Files: </b><br/>
+	<% for(var i=0; i<files.length; i++) {%>
+		<input type="radio" name="fileupload" ng-model="fileup" value="<%= files[i] %>">
+	   <b><%= files[i] %></b><br/>
+	<% } %>
+	<input type="radio" name="fileupload" ng-model="fileup" value="<%= files[0] %>/all/all"> <b style="color:red;" ">Compress All Files & Upload</b>
+	</ul>
+
+	<b>Quality: </b><br />
+	<ul>
+		<input type="radio" name="quality" ng-model="qulaity" value="1080"><b>1080p</b>
+		<input type="radio" name="quality" ng-model="qulaity" value="720"><b>720p</b>
+		<input type="radio" name="quality" ng-model="qulaity" value="480"><b>480p</b>
+		<input type="radio" name="quality" ng-model="qulaity" value="360"><b>360p</b>
+		<input type="radio" name="quality" ng-model="qulaity" value="240"><b>240p</b>
+	</ul>
+	<a href="../download/<%= filename %>/<%= torrentsize %>/{{ newvaluee }}/{{qulaity}}">Downlaod</a>
+	</form>
+
+</div>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+    <script type="text/javascript">
+    	var app = angular.module('downlaod', []);
+    	app.controller('cont1', ['$http', '$scope', '$log', function($http, $scope, $log){
+    		$scope.fileup = '';
+    		$scope.qulaity = '';
+    		$scope.newvaluee = '';
+    		$scope.$watch('fileup', function(newValue, oldValue, scope) {
+    			var find = ' ';
+				var re = new RegExp(find, 'g');
+
+				$scope.newvaluee = newValue.replace(re, '*');
+    		}, false);
+    		
+    	}]);
+    </script>
+  </body>
+ </html>
